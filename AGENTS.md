@@ -23,6 +23,13 @@
 
 Never claim a check passed unless it actually ran and its exit status/output was observed. If a command cannot run because of the environment, report the exact command, failure, and remaining uncertainty. Do not make the user's manual testiing a substitute for a validation that the agent can perform locally.
 
+## Mandatory Completion Gates
+
+For every completed change set, the following gates are mandatory after implementation and initial validation succeed:
+
+1. Load and follow the `code-simplification` skill. Limit simplification to the changed scope, preserve behavior, and avoid churn. If no simplification is justified, record a reviewed no-op.
+2. Re-run affected validation if simplification changed anything.
+3. Resolve all Critical and Required findings, re-run relevant validation, and repeat a focused review when fixes are non-trivial.
 
 ## Non-Code Documentation Changes
 
