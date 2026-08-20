@@ -26,11 +26,11 @@ Before going further, confirm the fixed point resolves (`git rev-parse <fixed-po
 
 Look for the originating spec, in this order:
 
-1. **A plan file at `.claude/plans/*.md` matching this work**, or a path the user passed directly. This is the output of a `grill-me` session — the settled decisions and seams, written down instead of left in conversation. Prefer it over everything below: it's durable across sessions and more precise than a reconstructed summary.
-2. **This conversation, if the work was scoped here and no plan file exists.** E.g. an `ExitPlanMode` plan that was approved but never written to disk. Reconstruct the confirmed understanding from the transcript.
-3. Issue references in the commit messages (`#123`, `Closes #45`, a ticket ID like `TLAWTH-64`) — fetch the ticket only if a connected tool/MCP can resolve it; otherwise the ID is just a label, not a blocker.
-4. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature, if the repo happens to keep one.
-5. If nothing is found, ask the user once where the spec is. If they say there isn't one, the **Spec** sub-agent skips and reports "no spec available" — that's a normal outcome, not a failure.
+  1. **A plan file at `.claude/plans/*.md` matching this work**, or `.pi/plans/*.md` or `.codex/plans/*.md` or a path the user passed directly. This is the output of a `grill-me` session — the settled decisions and seams, written down instead of left in conversation. Prefer it over everything below: it's durable across sessions and more precise than a reconstructed summary.
+  2. **This conversation, if the work was scoped here and no plan file exists.** E.g. an `ExitPlanMode` plan that was approved but never written to disk. Reconstruct the confirmed understanding from the transcript.
+  3. Issue references in the commit messages (`#123`, `Closes #45`, a ticket ID like `TLAWTH-64`) — fetch the ticket only if a connected tool/MCP can resolve it; otherwise the ID is just a label, not a blocker.
+  4. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature, if the repo happens to keep one.
+  5. If nothing is found, ask the user once where the spec is. If they say there isn't one, the **Spec** sub-agent skips and reports "no spec available" — that's a normal outcome, not a failure.
 
 ### 3. Identify the standards sources
 
