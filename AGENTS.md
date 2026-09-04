@@ -1,6 +1,10 @@
+# Engineering guide
+
+Defaults for agent sessions using this setup. Repository-local instruction files, project documentation, and the explicit user request override this file when they differ.
+
 ## Operating Contract
 
-- Always write in ASD-STE100, or Simplified Technical English and use the `/unslop` skill.
+- Always write in ASD-STE100, or Simplified Technical English, and use the `/unslop` skill.
 - Follow Zinsser's four principles of quality writing: 1. Simplicity, 2. Brevity, 3. Clarity, 4. Humanity.
 - Determine intent before acting. For requests to explain, review, diagnose, or plan, inspect and report without editing unless changes are also requested. For requests to build, fix, refactor, or change, complete the in-scope local work and validation to the end.
 - Prefer action over ceremony. Make reasonable, reversible assumptions and continue; ask a focused question only when a decision is materially ambiguous, destructive, costly, security-sensitive, or scope-expanding.
@@ -10,7 +14,6 @@
 - Prefer the standard library and existing dependencies. Add a production dependency only if the task requires it, or if the existing stack is insufficient, and its maintenance and security are justified.
 - Do not use excessive defensive programming, guard clauses, or try/catch blocks that do not make sense. Prefer an early return instead of excessive defensive clauses. Code should be imperative and descriptive.
 
-
 ## Work and Verification Loop
 
 1. Discover the applicable instructions, repository layout, project versions, canonical commands, relevant implementation, and tests.
@@ -18,18 +21,11 @@
 3. Implement the solution using TDD (use the `tdd` skill). If a `.claude/plans/*.md` file covers this work, treat its confirmed seams and decisions as settled; do not re-ask what it already resolved. Follow existing patterns and wire every affected surface.
 4. Add or update focused tests when behavior changes or a regression needs protection.
 5. Run the narrowest relevant validation first, then broader build, test, lint, format, type, or integrations checks warranted by the change.
-6. Once the change is stable, run the `code-review` skill against the same plan file (or the conversation's confirmed plan, if no file exists). Apply its findings yourself, or hand pure-quality cleanups to the `simplify` skill.
-7. Inspect the final diff for accidental edits, dead code, encoding damage, generated-file churn, and missing call sites.
+6. When the change is stable, run the `code-review` skill against the same plan file (or the conversation's confirmed plan, if no file exists). Resolve all Critical and Required findings, and re-run relevant validation when fixes are non-trivial.
+7. Run the `code-simplification` skill on the changed scope only. A reviewed no-op is acceptable. Re-run validation if simplification changed anything.
+8. Inspect the final diff for accidental edits, dead code, encoding damage, generated-file churn, and missing call sites.
 
-Never claim a check passed unless it actually ran and its exit status/output was observed. If a command cannot run because of the environment, report the exact command, failure, and remaining uncertainty. Do not make the user's manual testiing a substitute for a validation that the agent can perform locally.
-
-## Mandatory Completion Gates
-
-For every completed change set, the following gates are mandatory after implementation and initial validation succeed:
-
-1. Load and follow the `code-simplification` skill. Limit simplification to the changed scope, preserve behavior, and avoid churn. If no simplification is justified, record a reviewed no-op.
-2. Re-run affected validation if simplification changed anything.
-3. Resolve all Critical and Required findings, re-run relevant validation, and repeat a focused review when fixes are non-trivial.
+Never claim a check passed unless it actually ran and its exit status/output was observed. If a command cannot run because of the environment, report the exact command, failure, and remaining uncertainty. Do not make the user's manual testing a substitute for a validation that the agent can perform locally. Do not declare work complete until steps 6–7 finish.
 
 ## Non-Code Documentation Changes
 
@@ -39,8 +35,8 @@ For changes limited to Markdown (`.md`), text (`.txt`), or other non-code files,
 
 - Inspect `git status` and relevant diffs before editing and before finishing. A dirty worktree is normal; preserve user changes and do not overwrite or revert unrelated work.
 - Never run destructive Git commands such as `git reset --hard`, `git clean -fd`, or `git checkout --` without explicit approval.
-- Do not create or amend commits unless the user explicitly requests it or an invoked workflow skill makes a commit a mandatory step. Optinal examples or suggestions inside a skill do not authorize a commit.
-- Do not push, create or merge a pull request, publish, deply, rerun remote workflows, comment on GitHub, apply database migrations, or mutate cloud resources unless the user explicitly requests it or an invoked skill explicitly requires it.
+- Do not create or amend commits unless the user explicitly requests it or an invoked workflow skill makes a commit a mandatory step. Optional examples or suggestions inside a skill do not authorize a commit.
+- Do not push, create or merge a pull request, publish, deploy, rerun remote workflows, comment on GitHub, apply database migrations, or mutate cloud resources unless the user explicitly requests it or an invoked skill explicitly requires it.
 - Safe local inspection, in-scope edits, and non-destructive build/tests are authorized by implementation requests and should not require repeated approval.
 - Never expose, log, persist, or commit credentials, tokens, connection strings, or secret values. Redact secrets from command output and summaries.
 
@@ -58,18 +54,11 @@ For changes limited to Markdown (`.md`), text (`.txt`), or other non-code files,
 - Tests should assert observable behavior and meaningful error paths, not implementation details. Use the project's existing framework and style.
 - Do not hand-edit generated files or lockfiles. Use the owning generator/package tool and review the resulting diff.
 
-## .NET And C#
+## Domain Guides
 
-- Read `global.json`, `Directory.Build.*`, solution/project files, package configuration, and nearby code before selecting APIs or language features. Existing targets win; do not upgrade a repository unless asked.
-- For a new unconstrained .NET project, prefer .NET 10 and the corresponding supported C# version. Otherwise, use the language version the project supports.
-- Respect nullable reference types and existing analyzer rules. Prefer idiomatic C#, descriptive names, dependency injection, options, and structured `ILogger` logging where the project uses them.
-- Use `async`/`await` for genuine I/O and propagate `CancellationToken` through cancellable boundaries when consistent with the codebase. Avoid `.Result`, `.Wait()`, and unnecessary async wrappers.
-- With EF Core, preserve query semantics and transaction boundaries; project only needed data, prevent N+1 access, and use no-tracking reads when appropriate. In existing repositories, do not introduce a repository layer unless their architecture calls for it;
-- net-new repositories/projects run a `/grill-me` session to discuss the architecture.
-- Keep public API contracts, nullable annotations, serialization names, and error responses deliberate. Update XML/OpenAPI documentation through the mechanism already used by the repository.
-- Use the existing test stack (for example xUnit, NUnit, Moq, or NSubstitute); do not introduce another framework without need.
-- Always use `/tdd` when developing new features or hotfixes.
-- Prefer repository validation scripts. When none exist, select the relevant solution/project and run suitable `dotnet build` and `dotnet test` commands, plus configured formatting/analyzer checks.
+- .NET and C#: apply the `dotnet-conventions` skill.
+- Python: apply the `python-conventions` skill.
+- Added or changed HTTP endpoints: apply the `api-endpoint-conventions` skill.
 
 ## Github CLI
 
@@ -80,7 +69,7 @@ For changes limited to Markdown (`.md`), text (`.txt`), or other non-code files,
 ## Final Response
 
 - `/unslop` before responding.
-- Lead with the outcome. For completed change sets, summarize changed files and why, list exact validation commands with pass/fail results, and state both mandatory gate outcomes plus unresolved findings or residual risk.
+- Lead with the outcome. For completed change sets, summarize changed files and why, list exact validation commands with pass/fail results, and state both gate outcomes plus unresolved findings or residual risk.
 - Distinguish verified facts from assumptions and explicitly name checks that could not run.
 - For review-only requests, present findings first in severity order with file/line references; state clearly when no findings exist and note remaining test gaps.
 - Keep the response concise and actionable. Do not dump whole files or raw logs when paths and key evidence are sufficient.

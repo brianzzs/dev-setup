@@ -37,7 +37,7 @@ When the shape of that interface is itself in question (how deep the module is, 
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** Once the vertical slices are done, hand the diff to the `code-review` skill — its Standards axis carries a test-quality baseline that catches exactly the anti-patterns above (implementation coupling, tautological assertions, verification overreach), in addition to production-code smells. `code-review` only reports findings; apply them yourself, or dispatch the `simplify` skill for the pure quality cleanups it flags.
+- **Refactoring is not part of the loop.** Once the vertical slices are done, hand the diff to the `code-review` skill — its Standards axis carries a test-quality baseline that catches exactly the anti-patterns above (implementation coupling, tautological assertions, verification overreach), in addition to production-code smells. `code-review` only reports findings; apply them yourself, or dispatch the `code-simplification` skill for the pure quality cleanups it flags.
 
 ## If a Failing Test Is Impractical
 

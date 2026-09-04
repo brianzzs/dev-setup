@@ -2,10 +2,20 @@
 This is my basic .NET setup for Coding Agents that I use on a daily basis.
 
 ## skills
--  grill-me
+
+Workflow:
+- grill-me
 - tdd
 - code-review
+- code-simplification
 - unslop
+- to-spec
+- to-tasks
+
+Conventions:
+- dotnet-conventions
+- python-conventions
+- api-endpoint-conventions
 
 ## Core Idea and Workflow
 
