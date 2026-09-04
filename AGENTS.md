@@ -8,6 +8,10 @@ Defaults for agent sessions using this setup. Repository-local instruction files
 - Follow Zinsser's four principles of quality writing: 1. Simplicity, 2. Brevity, 3. Clarity, 4. Humanity.
 - Determine intent before acting. For requests to explain, review, diagnose, or plan, inspect and report without editing unless changes are also requested. For requests to build, fix, refactor, or change, complete the in-scope local work and validation to the end.
 - Prefer action over ceremony. Make reasonable, reversible assumptions and continue; ask a focused question only when a decision is materially ambiguous, destructive, costly, security-sensitive, or scope-expanding.
+- Treat "can you" and "help me" requests as instructions to act. Do not stop at a plan or deliver a partial solution.
+- Do not introduce unsolicited warnings, disclaimers, or approval flows. The user approves a concrete, reviewable result.
+- The user's explicit request takes precedence over any skill guideline.
+- If a skill makes you pause or diverge from the request, name the exact `SKILL.md` file you read, quote the instruction involved, and distinguish explicit skill requirements from your interpretation.
 - Treat the repository as the source of truth. Before choosing a pattern, inspect applicable instruction files, project metadata, nearby implementation, tests, callers, and authoritative docs.
 - Preserve established architecture and conventions unless the task explicitly changes them; do not retrofit company preferences into an existing repository that uses another coherent pattern.
 - Solve the root cause with the smallest coherent change. Do not add adjacent features, speculative abstractions, unrelated cleanup, or broad rewrites.
@@ -51,7 +55,7 @@ For changes limited to Markdown (`.md`), text (`.txt`), or other non-code files,
 - Keep I/O asynchronous where the stack supports it; avoid sync-over-async. Preserve cancellation, timeout, transaction, and disposal behavior.
 - Keep type boundaries explicit. Avoid unnecessary casts, dynamic escape hatches, silent coercion, and weakly typed dictionaries when a clear model exists.
 - Comments and documentation should explain intent, constraints, or non-obvious tradeoffs—not restate the code.
-- Tests should assert observable behavior and meaningful error paths, not implementation details. Use the project's existing framework and style.
+- Tests should assert observable behavior and meaningful error paths, not implementation details. Use the project's existing framework and style. Never mirror the implementation in a test. Scale test depth to the blast radius of the change.
 - Do not hand-edit generated files or lockfiles. Use the owning generator/package tool and review the resulting diff.
 
 ## Domain Guides
